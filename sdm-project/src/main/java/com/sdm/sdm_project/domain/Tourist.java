@@ -28,6 +28,28 @@ public class Tourist {
     private String cnp;
     private String creditCardNumber;
 
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    public Tourist(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+
     @OneToMany(mappedBy = "tourist")
     private List<Booking> bookings;
+
+
+    public Tourist(String name, String cnp, String creditCardNumber, String username, String password) {
+        this.name = name;
+        this.cnp = cnp;
+        this.creditCardNumber = creditCardNumber;
+        this.username = username;
+        this.password = password;
+
+    }
 }
