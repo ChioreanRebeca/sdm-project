@@ -1,0 +1,8 @@
+<form th:action="@{/tourist/book}" th:object="${dates}" method="post">
+  <label>Check-In:</label>
+  <input type="date" th:field="*{checkInDate}" required/>
+  <label>Check-Out:</label>
+  <input type="date" th:field="*{checkOutDate}" required/>
+  <button type="submit">Find Rooms</button>
+</form>
+<p th:if="${error}" style="color:red;" th:text="${error}"></p>

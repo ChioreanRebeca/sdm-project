@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Room List</title>
+</head>
+<body>
+<h2>Room List</h2>
+<a th:href="@{/admin/add-room}">Add New Room</a>
+<table>
+    <tr>
+        <th>Room Number</th>
+        <th>Type</th>
+        <th>Hotel</th>
+        <th>Available</th>
+    </tr>
+    <tr th:each="room : ${rooms}">
+        <td th:text="${room.roomNumber}"></td>
+        <td th:text="${room.type}"></td>
+        <td th:text="${room.hotel.name}"></td>
+        <td th:text="${room.isAvailable}"></td>
+    </tr>
+</table>
+
+<br><br>
+<a href="/admin/dashboard">back to dashboard</a>
+</body>
+</html>

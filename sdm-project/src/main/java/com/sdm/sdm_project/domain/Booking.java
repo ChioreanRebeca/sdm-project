@@ -25,8 +25,8 @@ public class Booking {
 
     private String bookingNumber;
     private String bookingDate;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate checkInDate;
+    private LocalDate checkOutDate;
     private LocalDate cancelationDate;
     private Double totalPrice;
 

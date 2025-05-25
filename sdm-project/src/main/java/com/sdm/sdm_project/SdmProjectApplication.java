@@ -85,8 +85,8 @@ public class SdmProjectApplication {
 			Booking booking = new Booking();
 			booking.setBookingNumber("BK001");
 			booking.setBookingDate(LocalDate.now().toString());
-			booking.setStartDate(LocalDate.now().plusDays(1));
-			booking.setEndDate(LocalDate.now().plusDays(5));
+			booking.setCheckInDate(LocalDate.now().plusDays(1));
+			booking.setCheckOutDate(LocalDate.now().plusDays(5));
 			booking.setCancelationDate(null);
 			booking.setTotalPrice(400.0);
 			booking.setTourist(tourist);

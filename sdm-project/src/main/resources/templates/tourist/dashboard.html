@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Tourist Dashboard</title>
 </head>
 <body>
+<h1>Welcome to your Dashboard</h1>
+
 <p>This is the tourist dashboard</p>
+
+<!-- Link to start booking process -->
+<a th:href="@{/tourist/book}">Book a Room</a>
+
+
+
+<h2>Your Bookings</h2>
+<table border="1" th:if="${bookings}">
+    <thead>
+    <tr>
+        <th>Booking Number</th>
+        <th>Room Number</th>
+        <th>Check-In</th>
+        <th>Check-Out</th>
+        <th>Total Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="booking : ${bookings}">
+        <td th:text="${booking.bookingNumber != null ? booking.bookingNumber : 'N/A'}"></td>
+        <td th:text="${booking.room.roomNumber}"></td>
+        <td th:text="${booking.checkInDate}"></td>
+        <td th:text="${booking.checkOutDate}"></td>
+        <td th:text="${booking.totalPrice != null ? booking.totalPrice : 'N/A'}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<p th:if="${bookings == null or #lists.isEmpty(bookings)}">You have no bookings yet.</p>
+
+
 </body>
 </html>

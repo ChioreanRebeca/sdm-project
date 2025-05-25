@@ -1,0 +1,10 @@
+<form th:action="@{/tourist/confirm-booking}" method="post">
+    <input type="hidden" name="checkInDate" th:value="${dates.checkInDate}" />
+    <input type="hidden" name="checkOutDate" th:value="${dates.checkOutDate}" />
+
+    <div th:each="room : ${rooms}">
+        <input type="radio" name="roomId" th:value="${room.id}" required />
+        Room <span th:text="${room.roomNumber}"></span> - <span th:text="${room.type}"></span><br/>
+    </div>
+    <button type="submit">Book</button>
+</form>
