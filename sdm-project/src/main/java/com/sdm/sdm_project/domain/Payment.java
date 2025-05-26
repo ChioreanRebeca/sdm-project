@@ -1,8 +1,12 @@
 package com.sdm.sdm_project.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity(name = "Payment")
 @Data
@@ -20,12 +24,14 @@ public class Payment {
             generator = "payment_seq"
     )
     @Column(name = "id", updatable = false)
-    private long id;
+    private Long id;
 
-    private String paymentDate;
+    private LocalDate paymentDate;
     private Double amount;
     private PaymentType paymentType;
-    @OneToOne
+
+    @ManyToOne
+    @JsonIgnore
     private Booking booking;
 }
 

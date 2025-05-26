@@ -3,8 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <title>Cashier Dashboard</title>
+
 </head>
 <body>
-<p>This is the cashier dashboard</p>
+<h1>Cashier Dashboard</h1>
+
+<section>
+    <h3>Cancel Booking</h3>
+    <input type="text" id="cancelBookingNumber" placeholder="Booking Number">
+    <button onclick="cancelBooking()">Cancel</button>
+</section>
+
+<section>
+    <h3>Extend Booking</h3>
+    <input type="text" id="extendBookingNumber" placeholder="Booking Number">
+    <input type="date" id="newCheckoutDate">
+    <button onclick="extendBooking()">Extend</button>
+</section>
+
+<section>
+    <h3>Current Bookings</h3>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Booking Number</th>
+            <th>Tourist Name</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
+            <th>Canceled</th>
+            <th>Payed</th>
+        </tr>
+        </thead>
+        <tbody id="bookingTableBody">
+        <!-- Filled by JS -->
+        </tbody>
+    </table>
+    <button onclick="loadBookings()">Refresh</button>
+</section>
+
+<section>
+    <h3>Mark Booking as Paid</h3>
+    <input type="text" id="payBookingId" placeholder="Booking ID">
+    <button onclick="markAsPaid()">Pay</button>
+</section>
+
+<section>
+    <h3>Search Bookings by CNP</h3>
+    <input type="text" id="searchCnp" placeholder="CNP">
+    <button onclick="searchBookingsByCnp()">Search</button>
+    <ul id="cnpBookingResults"></ul>
+</section>
+
+<script>
+    function markAsPaid() {
+        const bookingId = document.getElementById("payBookingId").value;
+        fetch(`/cashier/pay/${bookingId}`, { method: 'POST' })
+            .then(res => res.text())
+            .then(alert)
+            .catch(console.error);
+    }
+
+    function searchBookingsByCnp() {
+        const cnp = document.getElementById("searchCnp").value;
+        fetch(`/cashier/bookings/by-cnp/${cnp}`)
+            .then(res => res.json())
+            .then(bookings => {
+                const ul = document.getElementById("cnpBookingResults");
+                ul.innerHTML = "";
+                bookings.forEach(b => {
+                    const li = document.createElement("li");
+                    li.textContent = `Booking: ${b.bookingNumber}, Paid: ${b.payed}`;
+                    ul.appendChild(li);
+                });
+            });
+    }
+</script>
+
+
+
+<script>
+    function loadBookings() {
+        fetch('/cashier/bookings')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById("bookingTableBody");
+                tbody.innerHTML = "";
+
+                data.forEach(booking => {
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>${booking.bookingNumber}</td>
+                        <td>${booking.tourist?.name || 'Unknown'}</td>
+                        <td>${booking.checkInDate}</td>
+                        <td>${booking.checkOutDate}</td>
+                        <td>${booking.canceled}</td>
+                        <td>${booking.payed}</td>
+                    `;
+
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(console.error);
+    }
+
+    // Automatically load bookings on page load
+    window.onload = loadBookings;
+</script>
+
+
+<script>
+    function cancelBooking() {
+        const bookingNumber = document.getElementById("cancelBookingNumber").value;
+        fetch(`/cashier/cancel/${bookingNumber}`, {
+            method: 'POST'
+        })
+            .then(res => res.text())
+            .then(alert)
+            .catch(console.error);
+    }
+
+    function extendBooking() {
+        const bookingNumber = document.getElementById("extendBookingNumber").value;
+        const newDate = document.getElementById("newCheckoutDate").value;
+
+        fetch(`/cashier/extend/${bookingNumber}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ newCheckOutDate: newDate })
+        })
+            .then(res => res.text())
+            .then(alert)
+            .catch(console.error);
+    }
+</script>
 </body>
 </html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Edit Room</title></head>
+<body>
+<h2>Edit Room</h2>
+<form th:action="@{/admin/edit-room}" th:object="${room}" method="post">
+  <input type="hidden" th:field="*{id}"/>
+
+  <label>Room Number:</label>
+  <input type="number" th:field="*{roomNumber}" required/><br/>
+
+  <label>Type:</label>
+  <select th:field="*{type}">
+    <option value="SINGLE">Single</option>
+    <option value="DOUBLE">Double</option>
+  </select><br/>
+
+  <label>Quality:</label>
+  <input type="number" th:field="*{quality}" min="1" max="5"/><br/>
+
+  <label>Price:</label>
+  <input type="number" th:field="*{price}" step="0.01" required/><br/>
+
+  <label>Available:</label>
+  <input type="checkbox" th:field="*{isAvailable}"/><br/>
+
+  <label>Hotel:</label>
+  <select name="hotelId" required>
+    <option th:each="hotel : ${hotels}" th:value="${hotel.id}" th:selected="${hotel.id == room.hotel.id}"
+            th:text="${hotel.name}"></option>
+  </select><br/>
+
+  <button type="submit">Save</button>
+</form>
+
+<a href="/admin/rooms">Cancel</a>
+</body>
+</html>

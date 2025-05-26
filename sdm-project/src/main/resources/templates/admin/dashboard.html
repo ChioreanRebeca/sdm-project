@@ -1,10 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Admin Dashboard</title>
 </head>
 <body>
-<p>This is the admin dashboard page</p>
+<h1>Admin Dashboard</h1>
+<h2>Hotels</h2>
+<ul>
+    <li th:each="hotel : ${hotels}">
+        <span th:text="|${hotel.name} (${hotel.stars} stars)|"></span>
+        [<a th:href="@{'/admin/edit-hotel/' + ${hotel.id}}">Edit</a>]
+        [<a th:href="@{'/admin/delete-hotel/' + ${hotel.id}}" onclick="return confirm('Delete hotel?')">Delete</a>]
+    </li>
+</ul>
+
+<h2>Rooms</h2>
+<ul>
+    <li th:each="room : ${rooms}">
+        <span th:text="'Room #' + ${room.roomNumber} + ' - ' + ${room.type} + ', Hotel: ' + ${room.hotel.name} + ', Available: ' + ${room.isAvailable}"></span>
+        &nbsp;
+        <a th:href="@{'/admin/edit-room/' + ${room.id}}">Edit</a> |
+        <a th:href="@{'/admin/delete-room/' + ${room.id}}" onclick="return confirm('Delete room?')">Delete</a>
+    </li>
+</ul>
+
+<h2>Bookings</h2>
+<ul>
+    <li th:each="booking : ${bookings}"
+
+    th:text="'Booking #' + ${booking.bookingNumber}
+    + ' | Tourist: ' + ${booking.tourist.username}
+    + ' | Room: ' + ${booking.room.roomNumber}
+    + ' | Booking Date: ' + ${booking.bookingDate}
+    + ' | Total Price: $' + ${booking.totalPrice}
+    + ' | Canceled: ' + ${booking.canceled}">
+
+
+    </li>
+</ul>
+
+<h2>Tourists</h2>
+<ul>
+    <li th:each="tourist : ${tourists}"
+        th:text="${tourist.name} + ' (' + tourist.username + ')'">
+    </li>
+</ul>
+
+<h2>Managers</h2>
+<ul>
+    <li th:each="manager : ${managers}"
+        th:text="${manager.username}">
+    </li>
+</ul>
+
+<h2>Cashiers</h2>
+<ul>
+    <li th:each="cashier : ${cashiers}"
+        th:text="${cashier.username}">
+    </li>
+</ul>
+
+<a th:href="@{/admin/rooms}">➕ Add Room</a>
+<a th:href="@{/admin/add-hotel}">➕ Add Hotel</a>
+
+
 </body>
 </html>
