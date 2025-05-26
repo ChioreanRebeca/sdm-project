@@ -3,6 +3,7 @@ package com.sdm.sdm_project.services;
 import com.sdm.sdm_project.domain.Room;
 import com.sdm.sdm_project.repositories.BookingRepository;
 import com.sdm.sdm_project.repositories.RoomRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,4 +43,17 @@ public class RoomService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteById(Long id) {
+        if (roomRepository.existsById(id)) {
+            roomRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Room with ID " + id + " does not exist.");
+        }
+    }
+
+
+    public Room findById(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Room not found with ID: " + id));
+    }
 }

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface TouristRepository extends CrudRepository<Tourist,Long> {
     Optional<Tourist> findByUsername(String username);
+
+    Tourist findByCnp(String cnp);
 }

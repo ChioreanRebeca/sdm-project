@@ -5,6 +5,22 @@
     <title>Manager Dashboard</title>
 </head>
 <body>
-<p>This is the manager dashboard</p>
+<h1>Manager Dashboard</h1>
+
+<p><strong>Monthly Earnings:</strong> €<span th:text="${earnings}">0</span></p>
+<p><strong>Bookings Canceled this Month:</strong> <span th:text="${canceledCount}">0</span></p>
+
+<h2>Most Booked Room Types</h2>
+<table border="1">
+    <tr>
+        <th>Room Type</th>
+        <th>Number of Bookings</th>
+    </tr>
+    <tr th:each="roomStat : ${popularRooms}">
+        <td th:text="${roomStat[0]}">Room Type</td>
+        <td th:text="${roomStat[1]}">0</td>
+    </tr>
+</table>
+
 </body>
 </html>

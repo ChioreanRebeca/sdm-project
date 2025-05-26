@@ -19,7 +19,7 @@ public class Cashier {
             generator = "cashier_seq"
     )
     @Column(name = "id", updatable = false)
-    private long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String username;

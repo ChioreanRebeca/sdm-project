@@ -19,7 +19,7 @@ public class Service {
             generator = "service_seq"
     )
     @Column(name = "id", updatable = false)
-    private long id;
+    private Long id;
 
     private String name;
     private Double price;

@@ -22,7 +22,12 @@
         <th>Room Number</th>
         <th>Check-In</th>
         <th>Check-Out</th>
+        <th>Breakfast</th>
+        <th>Dinner</th>
+        <th>Internet</th>
         <th>Total Price</th>
+        <th>Booking Date</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -31,7 +36,17 @@
         <td th:text="${booking.room.roomNumber}"></td>
         <td th:text="${booking.checkInDate}"></td>
         <td th:text="${booking.checkOutDate}"></td>
+        <td th:text="${booking.breakfast ? 'Yes' : 'No'}"></td>
+        <td th:text="${booking.dinner ? 'Yes' : 'No'}"></td>
+        <td th:text="${booking.internet ? 'Yes' : 'No'}"></td>
         <td th:text="${booking.totalPrice != null ? booking.totalPrice : 'N/A'}"></td>
+        <td th:text="${booking.bookingDate}"></td>
+        <td>
+            <form th:action="@{'/tourist/cancel-booking/' + ${booking.id}}" method="post" th:if="${!booking.canceled}">
+                <button type="submit">Cancel</button>
+            </form>
+            <span th:if="${booking.canceled}">Canceled</span>
+        </td>
     </tr>
     </tbody>
 </table>

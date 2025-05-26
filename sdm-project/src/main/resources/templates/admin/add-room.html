@@ -20,10 +20,8 @@
   <label>Quality (1-5):</label>
   <input type="number" th:field="*{quality}" min="1" max="5"/><br/>
 
-<!--  <label>Hotel:</label>-->
-<!--  <select th:field="*{hotel}">-->
-<!--    <option th:each="hotel : ${hotels}" th:value="${hotel.id}" th:text="${hotel.name}"></option>-->
-<!--  </select><br/>-->
+  <label>Price (per night):</label>
+  <input type="number" step="0.01" th:field="*{price}" required /><br/>
 
   <label>Hotel:</label>
   <select name="hotelId" required>

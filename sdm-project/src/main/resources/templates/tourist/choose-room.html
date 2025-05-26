@@ -4,7 +4,17 @@
 
     <div th:each="room : ${rooms}">
         <input type="radio" name="roomId" th:value="${room.id}" required />
-        Room <span th:text="${room.roomNumber}"></span> - <span th:text="${room.type}"></span><br/>
+        Room <span th:text="${room.roomNumber}"></span> -
+        <span th:text="${room.type}"></span> -
+        <strong>Hotel:</strong> <span th:text="${room.hotel.name}"></span><br/>
     </div>
+
+
+    <p>Additional services</p>
+    <label><input type="checkbox" name="breakfast"/> Breakfast (+15.0/day)</label><br>
+    <label><input type="checkbox" name="dinner"/> Dinner (+25.0/day)</label><br>
+    <label><input type="checkbox" name="internet"/> Internet (+5.0/day)</label><br>
+
     <button type="submit">Book</button>
 </form>
+

@@ -52,9 +52,13 @@ public class TouristController {
 
     @GetMapping("/book")
     public String showBookingForm(Model model) {
-        model.addAttribute("dates", new BookingDateForm());
+        BookingDateForm dateRange = new BookingDateForm(); // use your actual form class
+        dateRange.setCheckInDate(LocalDate.now());
+        dateRange.setCheckOutDate(LocalDate.now().plusDays(3));
+        model.addAttribute("dates", dateRange);
         return "tourist/select-dates";
     }
+
 
     @PostMapping("/book")
     public String processDates(@ModelAttribute BookingDateForm dates, Model model) {
@@ -72,21 +76,78 @@ public class TouristController {
     public String confirmBooking(@RequestParam Long roomId,
                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
+                                 @RequestParam(required = false) boolean breakfast,
+                                 @RequestParam(required = false) boolean dinner,
+                                 @RequestParam(required = false) boolean internet,
                                  Principal principal,
                                  Model model) {
+
         Optional<Tourist> optionalTourist = touristRepository.findByUsername(principal.getName());
         Tourist tourist = optionalTourist.orElseThrow(() -> new RuntimeException("Tourist not found"));
 
         Room room = roomRepository.findById(roomId).orElseThrow();
         Booking booking = new Booking();
+
+        // Set room and tourist
         booking.setRoom(room);
         booking.setTourist(tourist);
+
+        // Set check-in and check-out dates
         booking.setCheckInDate(checkInDate);
         booking.setCheckOutDate(checkOutDate);
+
+        // Set booking date as today
+        booking.setBookingDate(LocalDate.now());
+
+        // Calculate number of nights and total price
+        long nights = checkOutDate.toEpochDay() - checkInDate.toEpochDay();
+        double basePrice = nights * room.getPrice();
+
+        double addOnPrice = 0.0;
+        if (breakfast) addOnPrice += 15.0 * nights;
+        if (dinner)    addOnPrice += 25.0 * nights;
+        if (internet)  addOnPrice += 5.0  * nights;
+
+        double totalPrice = basePrice + addOnPrice;
+
+        booking.setBreakfast(breakfast);
+        booking.setDinner(dinner);
+        booking.setInternet(internet);
+        booking.setTotalPrice(totalPrice);
+
+
+        // Generate booking number: "BK" + zero-padded ID (after saving once to get ID)
+        bookingService.save(booking); // Save once to generate ID
+        String bookingNumber = String.format("BK%03d", booking.getId());
+        booking.setBookingNumber(bookingNumber);
+
+        // Save again with booking number
         bookingService.save(booking);
 
         model.addAttribute("booking", booking);
         return "tourist/booking-confirmation";
     }
+
+    @PostMapping("/cancel-booking/{id}")
+    public String cancelBooking(@PathVariable Long id, Principal principal) {
+        Optional<Tourist> optionalTourist = touristRepository.findByUsername(principal.getName());
+        Tourist tourist = optionalTourist.orElseThrow(() -> new RuntimeException("Tourist not found"));
+
+        Booking booking = bookingService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
+
+
+        if (!booking.getTourist().getId().equals(tourist.getId())) {
+            throw new SecurityException("Not authorized to cancel this booking");
+        }
+
+        booking.setCanceled(true);
+        booking.setCancelationDate(LocalDate.now());
+        bookingService.save(booking);
+
+        return "redirect:/tourist/dashboard";
+    }
+
+
 }
 

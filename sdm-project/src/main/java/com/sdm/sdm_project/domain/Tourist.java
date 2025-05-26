@@ -1,5 +1,6 @@
 package com.sdm.sdm_project.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Tourist {
             generator = "tourist_seq"
     )
     @Column(name = "id", updatable = false)
-    private long id;
+    private Long id;
 
     private String name;
     private String cnp;
@@ -41,6 +42,7 @@ public class Tourist {
 
 
     @OneToMany(mappedBy = "tourist")
+    @JsonIgnoreProperties("tourist")
     private List<Booking> bookings;
 
 

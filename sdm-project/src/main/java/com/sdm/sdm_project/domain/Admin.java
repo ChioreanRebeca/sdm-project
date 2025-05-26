@@ -20,7 +20,7 @@ public class Admin {
             generator = "admin_seq"
     )
     @Column(name = "id", updatable = false)
-    private long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String username;
